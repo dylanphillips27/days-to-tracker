@@ -12,7 +12,17 @@ function daysUntil(dateStr) {
   return Math.ceil(diff / (1000 * 60 * 60 * 24));
 }
 
+function cleanExpired() {
+  trackers = trackers.filter(t => daysUntil(t.date) >= 0);
+  localStorage.setItem("trackers", JSON.stringify(trackers));
+}
+
 function render() {
+  cleanExpired();
+
+  // Sort by soonest date
+  trackers.sort((a, b) => new Date(a.date) - new Date(b.date));
+
   container.innerHTML = "";
   trackers.forEach(t => {
     const card = document.createElement("div");
